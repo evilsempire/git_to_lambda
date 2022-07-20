@@ -4,7 +4,7 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 10  
+      nodejs: 16  
     commands:
       - echo "This is build phase... Zipping my lambda function"
       - zip -r deployment_package.zip index.js index.html
@@ -25,6 +25,7 @@ phases:
 # used only for building and testing.
 # ExpressJS apps will need other artifact directories included (bin/*, public/*, routes/*, views/* etc).
 artifacts:
-  type: zip
-  paths:
-    - '*'
+  files:
+    - app.js
+    - index.html
+    - package.json
