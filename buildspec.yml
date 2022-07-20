@@ -6,7 +6,8 @@ phases:
     runtime-versions:
       nodejs: 10  
     commands:
-      - echo Installing Mocha...
+      - echo "This is build phase... Zipping my lambda function"
+      - zip -r deployment_package.zip index.js index.html
   pre_build:
     commands:
       - echo Installing source NPM dependencies...
@@ -15,16 +16,15 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Compiling the Node.js code
-      - mocha test.js
   post_build:
     commands:
-      - echo Build completed on `date`
+      - echo "Deploying to the Lambda"
+      - aws lambda update-function-code --function-name  code-deploy --zip-file fileb://deployment_package.zip
 # Include only the files required for your application to run.
 # Do not use recursively include artifacts from node_modules directory as it will include unnecessary packages 
 # used only for building and testing.
 # ExpressJS apps will need other artifact directories included (bin/*, public/*, routes/*, views/* etc).
 artifacts:
-  files:
-    - app.js
-    - index.html
-    - package.json
+  type: zip
+  paths:
+    - '*'
